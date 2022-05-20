@@ -18,65 +18,55 @@ import CIcon from '@coreui/icons-react'
 import { cilInfo, cilTrash } from '@coreui/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { deleteUser, getUsers } from 'src/actions/userActions'
+import { deleteProduct, getProducts } from 'src/actions/productActions'
 
-const UserList = () => {
-  const { users, message } = useSelector((state) => state.user)
+const ProductList = () => {
+  const { products, message } = useSelector((state) => state.product)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getUsers())
+    dispatch(getProducts())
   }, [dispatch, message])
 
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
-          <CCardHeader>User List Table</CCardHeader>
+          <CCardHeader>Product List Table</CCardHeader>
           <CCardBody>
-            {users ? (
+            {products ? (
               <CTable hover className="mt-4">
                 <CTableHead>
                   <CTableRow>
                     <CTableHeaderCell scope="col">#</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Username</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Email</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Role</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Name</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Category</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Price</CTableHeaderCell>
                     <CTableHeaderCell scope="col">Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {users.map((user, index) => (
-                    <CTableRow key={user.id}>
+                  {products.map((product, index) => (
+                    <CTableRow key={product.id}>
                       <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
-                      <CTableDataCell>{user.username}</CTableDataCell>
-                      <CTableDataCell>{user.email}</CTableDataCell>
-                      <CTableDataCell>{user.role}</CTableDataCell>
+                      <CTableDataCell>{product.name}</CTableDataCell>
+                      <CTableDataCell>{product.category}</CTableDataCell>
                       <CTableDataCell>
-                        {user.status ? (
-                          <CBadge color="success" shape="rounded-pill">
-                            Activated
-                          </CBadge>
-                        ) : (
-                          <CBadge color="danger" shape="rounded-pill">
-                            Not Activated
-                          </CBadge>
-                        )}
+                        Rp. {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                       </CTableDataCell>
                       <CTableDataCell>
                         <CButton
                           color="info"
                           className="text-white"
                           component={Link}
-                          to={`/user/${user.id}`}
+                          to={`/product/${product.id}`}
                         >
                           <CIcon icon={cilInfo} /> Detail
                         </CButton>
                         <CButton
                           color="danger"
                           className="text-white ms-2"
-                          onClick={() => dispatch(deleteUser(user.id))}
+                          onClick={() => dispatch(deleteProduct(product.id))}
                         >
                           <CIcon icon={cilTrash} /> Delete
                         </CButton>
@@ -86,7 +76,7 @@ const UserList = () => {
                 </CTableBody>
               </CTable>
             ) : (
-              <h4 className="text-center mt-4">No user is found</h4>
+              <h4 className="text-center mt-4">No product is found</h4>
             )}
           </CCardBody>
         </CCard>
@@ -95,4 +85,4 @@ const UserList = () => {
   )
 }
 
-export default UserList
+export default ProductList

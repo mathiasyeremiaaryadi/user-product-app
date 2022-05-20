@@ -1,35 +1,35 @@
-import { GET_USERS, GET_USER, CREATE_USER, DELETE_USER } from '../actions/actionTypes'
+import { GET_PRODUCTS, GET_PRODUCT, CREATE_PRODUCT, DELETE_PRODUCT } from '../actions/actionTypes'
 
 const initialState = {
   code: 0,
-  users: [],
-  user: {},
+  products: [],
+  product: {},
   message: '',
 }
 
-const user = (state = initialState, { type, payload }) => {
+const product = (state = initialState, { type, payload }) => {
   switch (type) {
-    case GET_USERS:
+    case GET_PRODUCTS:
       return {
         ...state,
         code: payload.code,
-        users: payload.data,
+        products: payload.data,
         message: payload.message,
       }
-    case GET_USER:
+    case GET_PRODUCT:
       return {
         ...state,
         code: payload.code,
-        user: payload.data,
+        product: payload.data,
         message: payload.message,
       }
-    case CREATE_USER:
+    case CREATE_PRODUCT:
       return {
         ...state,
         code: payload.code,
         message: payload.message,
       }
-    case DELETE_USER:
+    case DELETE_PRODUCT:
       return {
         ...state,
         code: payload.code,
@@ -40,4 +40,4 @@ const user = (state = initialState, { type, payload }) => {
   }
 }
 
-export default user
+export default product

@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux'
-import user from './user'
 import sidebar from './sidebar'
+import user from './user'
+import product from './product'
 
 export default combineReducers({
-  user,
   sidebar,
+  user,
+  product,
 })

@@ -12,7 +12,7 @@ import {
   CRow,
 } from '@coreui/react'
 import { useDispatch } from 'react-redux'
-import { createUser } from 'src/actions/userActions'
+import { createUser, getUsers } from 'src/actions/userActions'
 import { useNavigate } from 'react-router-dom'
 
 const UserNew = () => {
