@@ -14,14 +14,14 @@ import { getUser } from 'src/actions/userActions'
 import { useParams } from 'react-router-dom'
 
 const UserDetail = () => {
-  const dispatch = useDispatch()
   const { data } = useSelector((state) => state.user)
   const { id } = useParams()
   const [userId, user] = [id, data]
+  const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(getUser(userId))
-  }, [])
+  }, [userId])
 
   return (
     <CRow>
