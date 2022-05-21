@@ -17,21 +17,52 @@ import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useDispatch } from 'react-redux'
 import { loginUser } from 'src/actions/userActions'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import swal from 'sweetalert'
 
 const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const handleUserLogin = (event) => {
-    event.preventDefault()
-    const loginBody = {
-      email,
-      password,
-    }
+  const validationSchema = yup.object().shape({
+    email: yup.string().email().required(),
+    password: yup.string().required(),
+  })
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  })
+
+  const onUserLogin = (data) => {
+    const loginBody = { ...data }
 
     dispatch(loginUser(loginBody))
+      .then((response) => {
+        reset()
+        swal({
+          title: 'Success!',
+          text: response.message,
+          icon: 'success',
+          button: 'OK',
+        }).then(() => {
+          navigate('/')
+        })
+      })
+      .catch((error) => {
+        swal({
+          title: 'Failed!',
+          text: 'Invalid email or password',
+          icon: 'error',
+          button: 'OK',
+        })
+      })
   }
 
   return (
@@ -42,7 +73,7 @@ const Login = () => {
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
-                  <CForm onSubmit={handleUserLogin}>
+                  <CForm onSubmit={handleSubmit(onUserLogin)}>
                     <h1>Login</h1>
                     <p className="text-medium-emphasis">Sign In to your account</p>
                     <CInputGroup className="mb-3">
@@ -50,9 +81,10 @@ const Login = () => {
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
                       <CFormInput
-                        value={email}
+                        {...register('email')}
                         placeholder="Email"
-                        onChange={(event) => setEmail(event.target.value)}
+                        feedback={errors.email?.message}
+                        invalid={errors.email && true}
                       />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
@@ -60,10 +92,11 @@ const Login = () => {
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
                       <CFormInput
-                        value={password}
                         type="password"
+                        {...register('password')}
                         placeholder="Password"
-                        onChange={(event) => setPassword(event.target.value)}
+                        feedback={errors.password?.message}
+                        invalid={errors.password && true}
                       />
                     </CInputGroup>
                     <CRow>
@@ -72,11 +105,6 @@ const Login = () => {
                           Login
                         </CButton>
                       </CCol>
-                      {/* <CCol xs={6} className="text-right">
-                        <CButton color="link" className="px-0">
-                          Forgot password?
-                        </CButton>
-                      </CCol> */}
                     </CRow>
                   </CForm>
                 </CCardBody>

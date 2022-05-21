@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import {
-  CBadge,
   CCard,
   CCardBody,
   CCardHeader,
@@ -14,13 +13,26 @@ import { useParams } from 'react-router-dom'
 import { getProduct } from 'src/actions/productActions'
 
 const ProductDetail = () => {
-  const { product } = useSelector((state) => state.product)
+  const { product, message } = useSelector((state) => state.product)
   const { id } = useParams()
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(getProduct(id))
-  }, [dispatch, id])
+  }, [dispatch, id, message])
+
+  if (Object.keys(product).length === 0) {
+    return (
+      <CRow>
+        <CCol xs={12}>
+          <CCard className="mb-4">
+            <CCardHeader>Product Detail</CCardHeader>
+            <CCardBody></CCardBody>
+          </CCard>
+        </CCol>
+      </CRow>
+    )
+  }
 
   return (
     <CRow>
@@ -44,7 +56,9 @@ const ProductDetail = () => {
               <CListGroupItem>
                 <strong>Price</strong>
               </CListGroupItem>
-              <CListGroupItem>Rp. {product.price}</CListGroupItem>
+              <CListGroupItem>
+                Rp. {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              </CListGroupItem>
             </CListGroup>
           </CCardBody>
         </CCard>

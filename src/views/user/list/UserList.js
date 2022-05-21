@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
   CBadge,
   CButton,
@@ -15,7 +15,7 @@ import {
   CTableRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilInfo, cilTrash } from '@coreui/icons'
+import { cilInfo, cilPencil, cilTrash } from '@coreui/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { deleteUser, getUsers } from 'src/actions/userActions'
@@ -59,66 +59,87 @@ const UserList = () => {
     })
   }
 
+  if (users.length === 0) {
+    return (
+      <CRow>
+        <CCol xs={12}>
+          <CCard className="mb-4">
+            <CCardHeader>User List Table</CCardHeader>
+            <CCardBody>
+              <h4 className="text-center mt-4">No user is found</h4>
+            </CCardBody>
+          </CCard>
+        </CCol>
+      </CRow>
+    )
+  }
+
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>User List Table</CCardHeader>
           <CCardBody>
-            {users ? (
-              <CTable hover className="mt-4">
-                <CTableHead>
-                  <CTableRow>
-                    <CTableHeaderCell scope="col">#</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Username</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Email</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Role</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                    <CTableHeaderCell scope="col">Action</CTableHeaderCell>
-                  </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                  {users.map((user, index) => (
-                    <CTableRow key={user.id}>
-                      <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
-                      <CTableDataCell>{user.username}</CTableDataCell>
-                      <CTableDataCell>{user.email}</CTableDataCell>
-                      <CTableDataCell>{user.role}</CTableDataCell>
-                      <CTableDataCell>
-                        {user.status ? (
-                          <CBadge color="success" shape="rounded-pill">
-                            Activated
-                          </CBadge>
-                        ) : (
-                          <CBadge color="danger" shape="rounded-pill">
-                            Not Activated
-                          </CBadge>
-                        )}
-                      </CTableDataCell>
-                      <CTableDataCell>
+            <CTable responsive hover className="mt-4">
+              <CTableHead>
+                <CTableRow>
+                  <CTableHeaderCell scope="col">#</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Username</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Email</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Role</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Action</CTableHeaderCell>
+                </CTableRow>
+              </CTableHead>
+              <CTableBody>
+                {users.map((user, index) => (
+                  <CTableRow key={user.id}>
+                    <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
+                    <CTableDataCell>{user.username}</CTableDataCell>
+                    <CTableDataCell>{user.email}</CTableDataCell>
+                    <CTableDataCell>{user.role}</CTableDataCell>
+                    <CTableDataCell>
+                      {user.status ? (
+                        <CBadge color="success" shape="rounded-pill">
+                          Activated
+                        </CBadge>
+                      ) : (
+                        <CBadge color="danger" shape="rounded-pill">
+                          Not Activated
+                        </CBadge>
+                      )}
+                    </CTableDataCell>
+                    <CTableDataCell>
+                      <div className="d-grid gap-2 d-xl-block">
+                        <CButton
+                          color="danger"
+                          className="text-white me-xl-2"
+                          onClick={() => onUserDelete(user.id)}
+                        >
+                          <CIcon icon={cilTrash} /> Delete
+                        </CButton>
                         <CButton
                           color="info"
-                          className="text-white"
+                          className="text-white me-xl-2"
                           component={Link}
                           to={`/user/${user.id}`}
                         >
                           <CIcon icon={cilInfo} /> Detail
                         </CButton>
                         <CButton
-                          color="danger"
-                          className="text-white ms-2"
-                          onClick={() => onUserDelete(user.id)}
+                          color="warning"
+                          className="text-white"
+                          component={Link}
+                          to={`/user/edit/${user.id}`}
                         >
-                          <CIcon icon={cilTrash} /> Delete
+                          <CIcon icon={cilPencil} /> Update
                         </CButton>
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
-                </CTableBody>
-              </CTable>
-            ) : (
-              <h4 className="text-center mt-4">No user is found</h4>
-            )}
+                      </div>
+                    </CTableDataCell>
+                  </CTableRow>
+                ))}
+              </CTableBody>
+            </CTable>
           </CCardBody>
         </CCard>
       </CCol>

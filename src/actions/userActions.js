@@ -10,19 +10,25 @@ import {
 
 export const loginUser = (data) => {
   return (dispatch) => {
-    UserServices.loginUser(data)
-      .then((response) => {
-        dispatch({
-          type: LOGIN_USER,
-          payload: response.data,
+    return new Promise((resolve, reject) => {
+      UserServices.loginUser(data)
+        .then((response) => {
+          dispatch({
+            type: LOGIN_USER,
+            payload: response.data,
+          })
+
+          resolve(response.data)
         })
-      })
-      .catch((error) => {
-        dispatch({
-          type: LOGIN_USER,
-          payload: error.response.data,
+        .catch((error) => {
+          dispatch({
+            type: LOGIN_USER,
+            payload: error.response.data,
+          })
+
+          reject(error.response.data)
         })
-      })
+    })
   }
 }
 
@@ -43,16 +49,25 @@ export const getUsers = () => {
 
 export const getUser = (id) => {
   return (dispatch) => {
-    UserServices.getUser(id)
-      .then((response) => {
-        dispatch({
-          type: GET_USER,
-          payload: response.data,
+    return new Promise((resolve, reject) => {
+      UserServices.getUser(id)
+        .then((response) => {
+          dispatch({
+            type: GET_USER,
+            payload: response.data,
+          })
+
+          resolve(response.data)
         })
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+        .catch((error) => {
+          dispatch({
+            type: GET_USER,
+            payload: error.response.data,
+          })
+
+          reject(error.response.data)
+        })
+    })
   }
 }
 
@@ -82,16 +97,25 @@ export const createUser = (data) => {
 
 export const updateUser = (id, data) => {
   return (dispatch) => {
-    UserServices.updateUser(id, data)
-      .then((response) => {
-        dispatch({
-          type: UPDATE_USER,
-          payload: response.data,
+    return new Promise((resolve, reject) => {
+      UserServices.updateUser(id, data)
+        .then((response) => {
+          dispatch({
+            type: UPDATE_USER,
+            payload: response.data,
+          })
+
+          resolve(response.data)
         })
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+        .catch((error) => {
+          dispatch({
+            type: UPDATE_USER,
+            payload: error.response.data,
+          })
+
+          reject(error.response.data)
+        })
+    })
   }
 }
 

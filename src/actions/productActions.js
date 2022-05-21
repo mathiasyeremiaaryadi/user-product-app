@@ -24,60 +24,95 @@ export const getProducts = () => {
 
 export const getProduct = (id) => {
   return (dispatch) => {
-    ProductServices.getProduct(id)
-      .then((response) => {
-        dispatch({
-          type: GET_PRODUCT,
-          payload: response.data,
+    return new Promise((resolve, reject) => {
+      ProductServices.getProduct(id)
+        .then((response) => {
+          dispatch({
+            type: GET_PRODUCT,
+            payload: response.data,
+          })
+
+          resolve(response.data)
         })
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+        .catch((error) => {
+          dispatch({
+            type: GET_PRODUCT,
+            payload: error.response.data,
+          })
+
+          reject(error.response.data)
+        })
+    })
   }
 }
 
 export const createProduct = (data) => {
   return (dispatch) => {
-    ProductServices.createProduct(data)
-      .then((response) => {
-        dispatch({
-          type: CREATE_PRODUCT,
-          payload: response.data,
+    return new Promise((resolve, reject) => {
+      ProductServices.createProduct(data)
+        .then((response) => {
+          dispatch({
+            type: CREATE_PRODUCT,
+            payload: response.data,
+          })
+
+          resolve(response.data)
         })
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+        .catch((error) => {
+          dispatch({
+            type: CREATE_PRODUCT,
+            payload: error.response.data,
+          })
+
+          reject(error.response.data)
+        })
+    })
   }
 }
 
 export const updateProduct = (id, data) => {
   return (dispatch) => {
-    ProductServices.updateProduct(id, data)
-      .then((response) => {
-        dispatch({
-          type: UPDATE_PRODUCT,
-          payload: response.data,
+    return new Promise((resolve, reject) => {
+      ProductServices.updateProduct(id, data)
+        .then((response) => {
+          dispatch({
+            type: UPDATE_PRODUCT,
+            payload: response.data,
+          })
+
+          resolve(response.data)
         })
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+        .catch((error) => {
+          dispatch({
+            type: UPDATE_PRODUCT,
+            payload: error.response.data,
+          })
+
+          reject(error.response.data)
+        })
+    })
   }
 }
 
 export const deleteProduct = (id) => {
   return (dispatch) => {
-    ProductServices.deleteProduct(id)
-      .then((response) => {
-        dispatch({
-          type: DELETE_PRODUCT,
-          payload: response.data,
+    return new Promise((resolve, reject) => {
+      ProductServices.deleteProduct(id)
+        .then((response) => {
+          dispatch({
+            type: DELETE_PRODUCT,
+            payload: response.data,
+          })
+
+          resolve(response.data)
         })
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+        .catch((error) => {
+          dispatch({
+            type: DELETE_PRODUCT,
+            payload: error.response.data,
+          })
+          reject(error.response.data)
+        })
+    })
   }
 }

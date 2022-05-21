@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   CButton,
   CCard,
@@ -10,17 +10,19 @@ import {
   CFormLabel,
   CRow,
 } from '@coreui/react'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { createProduct } from 'src/actions/productActions'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import swal from 'sweetalert'
+import { getProduct, updateProduct } from 'src/actions/productActions'
 
-const ProductNew = () => {
+const ProductEdit = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { id } = useParams('id')
+  const { product, message } = useSelector((state) => state.product)
 
   const validationSchema = yup.object().shape({
     name: yup.string().required(),
@@ -33,15 +35,29 @@ const ProductNew = () => {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(validationSchema),
   })
 
-  const onCreateProduct = (data) => {
+  useEffect(() => {
+    dispatch(getProduct(id)).then(() => {
+      setValue('name', product.name)
+      setValue('category', product.category)
+      setValue('description', product.description)
+      setValue('price', product.price)
+    })
+
+    return () => {
+      reset()
+    }
+  }, [dispatch, message, id])
+
+  const onUpdateProduct = (data) => {
     const productBody = { ...data }
 
-    dispatch(createProduct(productBody))
+    dispatch(updateProduct(id, productBody))
       .then((response) => {
         reset()
         swal({
@@ -71,7 +87,7 @@ const ProductNew = () => {
             <strong>Create New Product Form</strong>
           </CCardHeader>
           <CCardBody>
-            <CForm onSubmit={handleSubmit(onCreateProduct)}>
+            <CForm onSubmit={handleSubmit(onUpdateProduct)}>
               <div className="mb-3">
                 <CFormLabel>Name</CFormLabel>
                 <CFormInput
@@ -121,4 +137,4 @@ const ProductNew = () => {
   )
 }
 
-export default ProductNew
+export default ProductEdit

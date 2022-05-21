@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   CButton,
   CCard,
@@ -11,43 +11,62 @@ import {
   CFormSelect,
   CRow,
 } from '@coreui/react'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { createUser } from 'src/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUser, updateUser } from 'src/actions/userActions'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import swal from 'sweetalert'
 
-const UserNew = () => {
+const UserEdit = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { id } = useParams('id')
+  const { user, message } = useSelector((state) => state.user)
+  const options = [
+    { value: '0', label: 'Not Activated' },
+    { value: '1', label: 'Activated' },
+  ]
 
   const validationSchema = yup.object().shape({
     username: yup.string().required(),
     email: yup.string().email().required(),
     phone: yup.number().typeError('phone must be number').positive().integer().required(),
     role: yup.string().oneOf(['admin', 'user']).required(),
-    password: yup.string().required(),
   })
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(validationSchema),
   })
 
-  const onCreateUser = (data) => {
+  useEffect(() => {
+    dispatch(getUser(id)).then(() => {
+      setValue('username', user.username)
+      setValue('email', user.email)
+      setValue('phone', user.phone)
+      setValue('role', user.role)
+    })
+
+    return () => {
+      reset()
+    }
+  }, [dispatch, message, id])
+
+  const onUpdateUser = (data) => {
     const userBody = {
       ...data,
       phone: `0${data.phone.toString()}`,
       status: data.status === '0' ? false : true,
     }
 
-    dispatch(createUser(userBody))
+    dispatch(updateUser(id, userBody))
       .then((response) => {
         reset()
         swal({
@@ -69,15 +88,30 @@ const UserNew = () => {
       })
   }
 
+  if (Object.keys(user).length === 0) {
+    return (
+      <CRow>
+        <CCol xs={12}>
+          <CCard className="mb-4">
+            <CCardHeader>
+              <strong>Update User Form</strong>
+            </CCardHeader>
+            <CCardBody></CCardBody>
+          </CCard>
+        </CCol>
+      </CRow>
+    )
+  }
+
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Create New User Form</strong>
+            <strong>Update User Form</strong>
           </CCardHeader>
           <CCardBody>
-            <CForm onSubmit={handleSubmit(onCreateUser)}>
+            <CForm onSubmit={handleSubmit(onUpdateUser)}>
               <div className="mb-3">
                 <CFormLabel>Username</CFormLabel>
                 <CFormInput
@@ -116,10 +150,11 @@ const UserNew = () => {
               </div>
               <div className="mb-3">
                 <CFormLabel>Status</CFormLabel>
-                <CFormSelect {...register('status')} defaultValue="0">
-                  <option value="0">Not Activated</option>
-                  <option value="1">Activated</option>
-                </CFormSelect>
+                <CFormSelect
+                  options={options}
+                  {...register('status')}
+                  defaultValue={user.status ? '1' : '0'}
+                />
               </div>
               <div className="mb-3">
                 <CFormLabel>Password</CFormLabel>
@@ -133,7 +168,7 @@ const UserNew = () => {
               </div>
               <div className="mb-3">
                 <CButton color="primary" type="submit">
-                  Create New User
+                  Update New User
                 </CButton>
               </div>
             </CForm>
@@ -144,4 +179,4 @@ const UserNew = () => {
   )
 }
 
-export default UserNew
+export default UserEdit

@@ -14,13 +14,26 @@ import { getUser } from 'src/actions/userActions'
 import { useParams } from 'react-router-dom'
 
 const UserDetail = () => {
-  const { user } = useSelector((state) => state.user)
+  const { user, message } = useSelector((state) => state.user)
   const { id } = useParams()
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(getUser(id))
-  }, [id])
+  }, [dispatch, id, message])
+
+  if (Object.keys(user).length === 0) {
+    return (
+      <CRow>
+        <CCol xs={12}>
+          <CCard className="mb-4">
+            <CCardHeader>User Detail</CCardHeader>
+            <CCardBody></CCardBody>
+          </CCard>
+        </CCol>
+      </CRow>
+    )
+  }
 
   return (
     <CRow>
