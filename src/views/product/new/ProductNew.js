@@ -26,9 +26,9 @@ const ProductNew = () => {
   const handleProductSubmit = (event) => {
     event.preventDefault()
     const productBody = {
-      name: name,
-      category: category,
-      description: description,
+      name,
+      category,
+      description,
       price: parseInt(price),
     }
 
@@ -54,7 +54,6 @@ const ProductNew = () => {
               <div className="mb-3">
                 <CFormLabel htmlFor="name">Name</CFormLabel>
                 <CFormInput
-                  type="text"
                   id="name"
                   value={name}
                   placeholder="Name"
@@ -64,7 +63,6 @@ const ProductNew = () => {
               <div className="mb-3">
                 <CFormLabel htmlFor="category">Category</CFormLabel>
                 <CFormInput
-                  type="text"
                   id="category"
                   value={category}
                   placeholder="Category"
@@ -74,7 +72,6 @@ const ProductNew = () => {
               <div className="mb-3">
                 <CFormLabel htmlFor="description">Description</CFormLabel>
                 <CFormInput
-                  type="text"
                   id="description"
                   value={description}
                   placeholder="Description"
@@ -84,7 +81,6 @@ const ProductNew = () => {
               <div className="mb-3">
                 <CFormLabel htmlFor="price">Price (Rp)</CFormLabel>
                 <CFormInput
-                  type="text"
                   id="price"
                   value={price}
                   placeholder="Price"

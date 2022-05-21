@@ -19,6 +19,7 @@ import { cilInfo, cilTrash } from '@coreui/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { deleteUser, getUsers } from 'src/actions/userActions'
+import swal from 'sweetalert'
 
 const UserList = () => {
   const { users, message } = useSelector((state) => state.user)
@@ -27,6 +28,36 @@ const UserList = () => {
   useEffect(() => {
     dispatch(getUsers())
   }, [dispatch, message])
+
+  const onUserDelete = (id) => {
+    swal({
+      title: 'Confirmation!',
+      text: 'Are you sure want to delete this user?',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    }).then((isConfirmDelete) => {
+      if (isConfirmDelete) {
+        dispatch(deleteUser(id))
+          .then((response) => {
+            swal({
+              title: 'Success!',
+              text: response.message,
+              icon: 'success',
+              button: 'OK',
+            })
+          })
+          .catch((error) => {
+            swal({
+              title: 'Failed!',
+              text: error.message,
+              icon: 'error',
+              button: 'OK',
+            })
+          })
+      }
+    })
+  }
 
   return (
     <CRow>
@@ -76,7 +107,7 @@ const UserList = () => {
                         <CButton
                           color="danger"
                           className="text-white ms-2"
-                          onClick={() => dispatch(deleteUser(user.id))}
+                          onClick={() => onUserDelete(user.id)}
                         >
                           <CIcon icon={cilTrash} /> Delete
                         </CButton>

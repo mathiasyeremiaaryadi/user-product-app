@@ -1,4 +1,4 @@
-import { GET_USERS, GET_USER, CREATE_USER, DELETE_USER } from '../actions/actionTypes'
+import { GET_USERS, GET_USER, CREATE_USER, DELETE_USER, LOGIN_USER } from '../actions/actionTypes'
 
 const initialState = {
   code: 0,
@@ -9,6 +9,12 @@ const initialState = {
 
 const user = (state = initialState, { type, payload }) => {
   switch (type) {
+    case LOGIN_USER:
+      return {
+        ...state,
+        code: payload.code,
+        message: payload.message,
+      }
     case GET_USERS:
       return {
         ...state,

@@ -12,40 +12,61 @@ import {
   CRow,
 } from '@coreui/react'
 import { useDispatch } from 'react-redux'
-import { createUser, getUsers } from 'src/actions/userActions'
+import { createUser } from 'src/actions/userActions'
 import { useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import swal from 'sweetalert'
 
 const UserNew = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [role, setRole] = useState('')
-  const [status, setStatus] = useState(false)
-  const [password, setPassword] = useState('')
 
-  const handleUserSubmit = (event) => {
-    event.preventDefault()
+  const validationSchema = yup.object().shape({
+    username: yup.string().required(),
+    email: yup.string().email().required(),
+    phone: yup.number().typeError('phone must be number').positive().integer().required(),
+    role: yup.string().oneOf(['admin', 'user']).required(),
+    password: yup.string().required(),
+  })
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  })
+
+  const onCreateUser = (data) => {
     const userBody = {
-      username: username,
-      email: email,
-      phone: phone,
-      role: role,
-      status: status,
-      password: password,
+      ...data,
+      phone: data.phone.toString(),
+      status: data.status === '0' ? false : true,
     }
 
     dispatch(createUser(userBody))
-
-    setUsername('')
-    setEmail('')
-    setPhone('')
-    setRole('')
-    setStatus(false)
-    setPassword('')
-
-    navigate('/user/list')
+      .then((response) => {
+        reset()
+        swal({
+          title: 'Success!',
+          text: response.message,
+          icon: 'success',
+          button: 'OK',
+        }).then(() => {
+          navigate('/user/list')
+        })
+      })
+      .catch((error) => {
+        swal({
+          title: 'Failed!',
+          text: error.message,
+          icon: 'error',
+          button: 'OK',
+        })
+      })
   }
 
   return (
@@ -56,67 +77,58 @@ const UserNew = () => {
             <strong>Create New User Form</strong>
           </CCardHeader>
           <CCardBody>
-            <CForm onSubmit={handleUserSubmit}>
+            <CForm onSubmit={handleSubmit(onCreateUser)}>
               <div className="mb-3">
-                <CFormLabel htmlFor="username">Username</CFormLabel>
+                <CFormLabel>Username</CFormLabel>
                 <CFormInput
-                  type="text"
-                  id="username"
-                  value={username}
+                  {...register('username')}
                   placeholder="Username"
-                  onChange={(event) => setUsername(event.target.value)}
+                  feedback={errors.username?.message}
+                  invalid={errors.username && true}
                 />
               </div>
               <div className="mb-3">
-                <CFormLabel htmlFor="email">Email</CFormLabel>
+                <CFormLabel>Email</CFormLabel>
                 <CFormInput
-                  type="text"
-                  id="email"
-                  value={email}
+                  {...register('email')}
                   placeholder="Email"
-                  onChange={(event) => setEmail(event.target.value)}
+                  feedback={errors.email?.message}
+                  invalid={errors.email && true}
                 />
               </div>
               <div className="mb-3">
-                <CFormLabel htmlFor="phone">Phone</CFormLabel>
+                <CFormLabel>Phone</CFormLabel>
                 <CFormInput
-                  type="text"
-                  id="phone"
-                  value={phone}
+                  {...register('phone')}
                   placeholder="Phone"
-                  onChange={(event) => setPhone(event.target.value)}
+                  feedback={errors.phone?.message}
+                  invalid={errors.phone && true}
                 />
               </div>
               <div className="mb-3">
-                <CFormLabel htmlFor="role">Role</CFormLabel>
+                <CFormLabel>Role</CFormLabel>
                 <CFormInput
-                  type="text"
-                  id="role"
-                  value={role}
+                  {...register('role')}
                   placeholder="Role"
-                  onChange={(event) => setRole(event.target.value)}
+                  feedback={errors.role?.message}
+                  invalid={errors.role && true}
                 />
               </div>
               <div className="mb-3">
-                <CFormLabel htmlFor="status">Status</CFormLabel>
-                <CFormSelect
-                  value={status}
-                  onChange={(event) => {
-                    setStatus(event.target.value === 'true')
-                  }}
-                >
-                  <option value="false">Not Activated</option>
-                  <option value="true">Activated</option>
+                <CFormLabel>Status</CFormLabel>
+                <CFormSelect {...register('status')} defaultValue="0">
+                  <option value="0">Not Activated</option>
+                  <option value="1">Activated</option>
                 </CFormSelect>
               </div>
               <div className="mb-3">
-                <CFormLabel htmlFor="password">Password</CFormLabel>
+                <CFormLabel>Password</CFormLabel>
                 <CFormInput
                   type="password"
-                  id="password"
-                  value={password}
+                  {...register('password')}
                   placeholder="Pasword"
-                  onChange={(event) => setPassword(event.target.value)}
+                  feedback={errors.password?.message}
+                  invalid={errors.password && true}
                 />
               </div>
               <div className="mb-3">

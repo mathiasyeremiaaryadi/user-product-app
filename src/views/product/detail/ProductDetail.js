@@ -44,9 +44,7 @@ const ProductDetail = () => {
               <CListGroupItem>
                 <strong>Price</strong>
               </CListGroupItem>
-              <CListGroupItem>
-                Rp. {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              </CListGroupItem>
+              <CListGroupItem>Rp. {product.price}</CListGroupItem>
             </CListGroup>
           </CCardBody>
         </CCard>
