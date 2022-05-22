@@ -14,7 +14,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { getUser, updateUser } from 'src/actions/userActions'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import swal from 'sweetalert'
@@ -41,6 +41,7 @@ const UserEdit = () => {
     handleSubmit,
     reset,
     setValue,
+    control,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(validationSchema),
@@ -75,6 +76,7 @@ const UserEdit = () => {
           icon: 'success',
           button: 'OK',
         }).then(() => {
+          reset()
           navigate('/user/list')
         })
       })
@@ -150,10 +152,11 @@ const UserEdit = () => {
               </div>
               <div className="mb-3">
                 <CFormLabel>Status</CFormLabel>
-                <CFormSelect
-                  options={options}
-                  {...register('status')}
+                <Controller
+                  name="status"
+                  control={control}
                   defaultValue={user.status ? '1' : '0'}
+                  render={({ field }) => <CFormSelect options={options} {...field} />}
                 />
               </div>
               <div className="mb-3">

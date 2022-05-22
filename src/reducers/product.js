@@ -3,7 +3,7 @@ import { GET_PRODUCTS, GET_PRODUCT, CREATE_PRODUCT, DELETE_PRODUCT } from '../ac
 const initialState = {
   code: 0,
   products: [],
-  product: {},
+  product: null,
   message: '',
 }
 

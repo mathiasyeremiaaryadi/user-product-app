@@ -16,11 +16,11 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useDispatch } from 'react-redux'
-import { loginUser } from 'src/actions/userActions'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import swal from 'sweetalert'
+import { loginUser } from 'src/actions/authActions'
 
 const Login = () => {
   const dispatch = useDispatch()

@@ -21,7 +21,7 @@ const ProductDetail = () => {
     dispatch(getProduct(id))
   }, [dispatch, id, message])
 
-  if (Object.keys(product).length === 0) {
+  if (!product) {
     return (
       <CRow>
         <CCol xs={12}>

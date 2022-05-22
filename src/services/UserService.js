@@ -1,9 +1,5 @@
 import http from '../http-common'
 
-const loginUser = (data) => {
-  return http.post(`/login`, data)
-}
-
 const getUsers = () => {
   return http.get(`/users`)
 }
@@ -25,7 +21,6 @@ const deleteUser = (id) => {
 }
 
 const UserServices = {
-  loginUser,
   getUsers,
   getUser,
   createUser,

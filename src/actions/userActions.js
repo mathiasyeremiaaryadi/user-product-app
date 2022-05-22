@@ -1,36 +1,5 @@
 import UserServices from 'src/services/UserService'
-import {
-  CREATE_USER,
-  DELETE_USER,
-  GET_USER,
-  GET_USERS,
-  LOGIN_USER,
-  UPDATE_USER,
-} from './actionTypes'
-
-export const loginUser = (data) => {
-  return (dispatch) => {
-    return new Promise((resolve, reject) => {
-      UserServices.loginUser(data)
-        .then((response) => {
-          dispatch({
-            type: LOGIN_USER,
-            payload: response.data,
-          })
-
-          resolve(response.data)
-        })
-        .catch((error) => {
-          dispatch({
-            type: LOGIN_USER,
-            payload: error.response.data,
-          })
-
-          reject(error.response.data)
-        })
-    })
-  }
-}
+import { CREATE_USER, DELETE_USER, GET_USER, GET_USERS, UPDATE_USER } from './actionTypes'
 
 export const getUsers = () => {
   return (dispatch) => {

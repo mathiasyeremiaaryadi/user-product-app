@@ -9,6 +9,9 @@ const loading = (
 )
 
 // Containers
+const AuthMiddleware = React.lazy(() => import('./components/AuthMiddleware'))
+
+// Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
 // Pages
@@ -27,7 +30,10 @@ class App extends Component {
             <Route exact path="/register" name="Register Page" element={<Register />} />
             <Route exact path="/404" name="Page 404" element={<Page404 />} />
             <Route exact path="/500" name="Page 500" element={<Page500 />} />
-            <Route path="*" name="Home" element={<DefaultLayout />} />
+
+            <Route element={<AuthMiddleware />}>
+              <Route path="*" name="Home" element={<DefaultLayout />} />
+            </Route>
           </Routes>
         </Suspense>
       </BrowserRouter>

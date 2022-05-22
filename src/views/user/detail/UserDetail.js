@@ -22,7 +22,7 @@ const UserDetail = () => {
     dispatch(getUser(id))
   }, [dispatch, id, message])
 
-  if (Object.keys(user).length === 0) {
+  if (!user) {
     return (
       <CRow>
         <CCol xs={12}>
