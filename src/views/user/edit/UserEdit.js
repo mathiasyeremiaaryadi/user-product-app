@@ -90,7 +90,7 @@ const UserEdit = () => {
       })
   }
 
-  if (Object.keys(user).length === 0) {
+  if (!user) {
     return (
       <CRow>
         <CCol xs={12}>

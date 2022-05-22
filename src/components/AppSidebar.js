@@ -14,12 +14,12 @@ import { changeFoldable, changeVisible } from 'src/actions/sidebarAction'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
-  const { sidebarShow, unfoldable } = useSelector((state) => state.sidebar)
+  const { sidebarShow, sidebarUnfoldable } = useSelector((state) => state.sidebar)
 
   return (
     <CSidebar
       position="fixed"
-      unfoldable={unfoldable}
+      unfoldable={sidebarUnfoldable}
       visible={sidebarShow}
       onVisibleChange={(visible) => dispatch(changeVisible(!visible))}
     >
@@ -33,7 +33,7 @@ const AppSidebar = () => {
       </CSidebarNav>
       <CSidebarToggler
         className="d-none d-lg-flex"
-        onClick={() => dispatch(changeFoldable(!unfoldable))}
+        onClick={() => dispatch(changeFoldable(!sidebarUnfoldable))}
       />
     </CSidebar>
   )
