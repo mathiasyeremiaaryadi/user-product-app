@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -25,6 +25,8 @@ import { loginUser } from 'src/actions/authActions'
 const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from?.pathname || '/'
 
   const validationSchema = yup.object().shape({
     email: yup.string().email().required(),
@@ -52,7 +54,7 @@ const Login = () => {
           icon: 'success',
           button: 'OK',
         }).then(() => {
-          navigate('/')
+          navigate(from, { replace: true })
         })
       })
       .catch((error) => {
