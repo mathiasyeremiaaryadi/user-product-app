@@ -1,4 +1,4 @@
-import { LOGIN_USER, LOGOUT_USER } from '../actions/actionTypes'
+import { LOGIN_USER, LOGOUT_USER, PERSIST_LOGIN_USER } from '../actions/actionTypes'
 
 const initialState = {
   code: 0,
@@ -14,6 +14,11 @@ const auth = (state = initialState, { type, payload }) => {
         code: payload.code,
         authenticatedUser: payload.data,
         message: payload.message,
+      }
+    case PERSIST_LOGIN_USER:
+      return {
+        ...state,
+        authenticatedUser: payload,
       }
     case LOGOUT_USER:
       return {

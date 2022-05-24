@@ -42,15 +42,21 @@ const ProductEdit = () => {
   })
 
   useEffect(() => {
-    dispatch(getProduct(id)).then(() => {
-      setValue('name', product.name)
-      setValue('category', product.category)
-      setValue('description', product.description)
-      setValue('price', product.price)
-    })
+    let isMounted = true
+    const controller = new AbortController()
+
+    isMounted &&
+      dispatch(getProduct(id)).then(() => {
+        setValue('name', product.name)
+        setValue('category', product.category)
+        setValue('description', product.description)
+        setValue('price', product.price)
+      })
 
     return () => {
       reset()
+      isMounted = false
+      controller.abort()
     }
   }, [dispatch, message, id])
 

@@ -19,7 +19,15 @@ const UserDetail = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getUser(id))
+    let isMounted = true
+    const controller = new AbortController()
+
+    isMounted && dispatch(getUser(id))
+
+    return () => {
+      isMounted = false
+      controller.abort()
+    }
   }, [dispatch, id, message])
 
   if (!user) {

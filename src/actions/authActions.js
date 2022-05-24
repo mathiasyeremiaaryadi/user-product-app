@@ -1,5 +1,5 @@
 import AuthServices from 'src/services/AuthServices'
-import { LOGIN_USER, LOGOUT_USER } from './actionTypes'
+import { LOGIN_USER, LOGOUT_USER, PERSIST_LOGIN_USER } from './actionTypes'
 
 export const loginUser = (data) => {
   return (dispatch) => {
@@ -14,8 +14,6 @@ export const loginUser = (data) => {
           resolve(response.data)
         })
         .catch((error) => {
-          console.log('called')
-
           dispatch({
             type: LOGIN_USER,
             payload: error.response.data,
@@ -23,6 +21,15 @@ export const loginUser = (data) => {
 
           reject(error.response.data)
         })
+    })
+  }
+}
+
+export const persistLoginUser = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: PERSIST_LOGIN_USER,
+      payload: data,
     })
   }
 }

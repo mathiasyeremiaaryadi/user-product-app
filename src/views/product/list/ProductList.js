@@ -25,7 +25,15 @@ const ProductList = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getProducts())
+    let isMounted = true
+    const controller = new AbortController()
+
+    isMounted && dispatch(getProducts())
+
+    return () => {
+      isMounted = false
+      controller.abort()
+    }
   }, [dispatch, message])
 
   const onProductDelete = (id) => {

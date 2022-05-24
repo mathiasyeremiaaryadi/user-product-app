@@ -4,7 +4,7 @@ import {
   SET_SIDEBAR_VISIBILITY,
 } from 'src/actions/actionTypes'
 
-const initialState = { sidebarShow: true, sidebarVisible: true, sidebarUnfoldable: true }
+const initialState = { sidebarShow: true, sidebarVisible: true, sidebarUnfoldable: false }
 
 const sidebar = (state = initialState, { type, payload }) => {
   switch (type) {

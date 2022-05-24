@@ -26,7 +26,15 @@ const UserList = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getUsers())
+    let isMounted = true
+    const controller = new AbortController()
+
+    isMounted && dispatch(getUsers())
+
+    return () => {
+      isMounted = false
+      controller.abort()
+    }
   }, [dispatch, message])
 
   const onUserDelete = (id) => {

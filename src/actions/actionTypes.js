@@ -1,4 +1,5 @@
 export const LOGIN_USER = 'LOGIN_USER'
+export const PERSIST_LOGIN_USER = 'PERSIST_LOGIN_USER'
 export const LOGOUT_USER = 'LOGOUT_USER'
 
 export const SET_SIDEBAR_STATUS = 'SET_SIDEBAR_STATUS'

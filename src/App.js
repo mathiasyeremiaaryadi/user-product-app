@@ -1,5 +1,7 @@
 import React, { Component, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import AuthPersistentMiddleware from './components/AuthPersistentMiddleware'
+import AuthReverseMiddleware from './components/AuthReverseMiddleware'
 import './scss/style.scss'
 
 const loading = (
@@ -26,13 +28,18 @@ class App extends Component {
       <BrowserRouter>
         <Suspense fallback={loading}>
           <Routes>
-            <Route exact path="/login" name="Login Page" element={<Login />} />
-            <Route exact path="/register" name="Register Page" element={<Register />} />
             <Route exact path="/404" name="Page 404" element={<Page404 />} />
             <Route exact path="/500" name="Page 500" element={<Page500 />} />
 
-            <Route element={<AuthMiddleware />}>
-              <Route path="*" name="Home" element={<DefaultLayout />} />
+            <Route element={<AuthPersistentMiddleware />}>
+              <Route element={<AuthReverseMiddleware />}>
+                <Route exact path="/login" name="Login Page" element={<Login />} />
+                <Route exact path="/register" name="Register Page" element={<Register />} />
+              </Route>
+
+              <Route element={<AuthMiddleware />}>
+                <Route path="*" name="Home" element={<DefaultLayout />} />
+              </Route>
             </Route>
           </Routes>
         </Suspense>

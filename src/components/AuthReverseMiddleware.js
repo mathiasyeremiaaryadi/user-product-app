@@ -2,15 +2,11 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 
-const AuthMiddleware = () => {
+const AuthReverseMiddleware = () => {
   const { authenticatedUser } = useSelector((state) => state.auth)
   const location = useLocation()
 
-  return authenticatedUser ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
-  )
+  return authenticatedUser ? <Navigate to="/" state={{ from: location }} /> : <Outlet />
 }
 
-export default AuthMiddleware
+export default AuthReverseMiddleware

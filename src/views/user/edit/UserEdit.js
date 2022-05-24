@@ -48,19 +48,29 @@ const UserEdit = () => {
   })
 
   useEffect(() => {
-    dispatch(getUser(id)).then(() => {
-      setValue('username', user.username)
-      setValue('email', user.email)
-      setValue('phone', user.phone)
-      setValue('role', user.role)
-    })
+    let isMounted = true
+    const controller = new AbortController()
+
+    isMounted &&
+      dispatch(getUser(id)).then(() => {
+        setValue('username', user.username)
+        setValue('email', user.email)
+        setValue('phone', user.phone)
+        setValue('role', user.role)
+      })
 
     return () => {
       reset()
+      isMounted = false
+      controller.abort()
     }
   }, [dispatch, message, id])
 
   const onUpdateUser = (data) => {
+    if (data.password === '') {
+      delete data['password']
+    }
+
     const userBody = {
       ...data,
       phone: `0${data.phone.toString()}`,

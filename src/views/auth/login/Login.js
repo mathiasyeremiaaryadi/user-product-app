@@ -48,6 +48,7 @@ const Login = () => {
     dispatch(loginUser(loginBody))
       .then((response) => {
         reset()
+        localStorage.setItem('_acctoken', JSON.stringify(response.data))
         swal({
           title: 'Success!',
           text: response.message,
@@ -57,7 +58,7 @@ const Login = () => {
           navigate(from, { replace: true })
         })
       })
-      .catch((error) => {
+      .catch(() => {
         swal({
           title: 'Failed!',
           text: 'Invalid email or password',

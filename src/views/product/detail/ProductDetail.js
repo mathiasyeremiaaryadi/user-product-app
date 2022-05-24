@@ -18,7 +18,15 @@ const ProductDetail = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getProduct(id))
+    let isMounted = true
+    const controller = new AbortController()
+
+    isMounted && dispatch(getProduct(id))
+
+    return () => {
+      isMounted = false
+      controller.abort()
+    }
   }, [dispatch, id, message])
 
   if (!product) {
